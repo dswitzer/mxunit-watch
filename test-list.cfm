@@ -1,4 +1,3 @@
-<cfsetting showdebugoutput="false" />
 <cfscript>
 	testsDir = expandPath('/your/project/tests');
 	componentPath = 'your.project.tests';
@@ -16,4 +15,5 @@
 		tests[t] = tests[t].methods;
 	}
 </cfscript>
+<cfsetting showdebugoutput="false" />
 <cfcontent reset="true" type="application/json; charset=UTF-8" /><cfoutput>#serializeJson(tests)#</cfoutput><cfabort/>
