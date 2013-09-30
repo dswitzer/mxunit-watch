@@ -18,12 +18,15 @@ Unfortunately the only way to get this working was to make one tiny and non-mali
 
 Open `mxunit.runner.DirectoryTestSuite` and change this function from private to public (on or about line 44):
 
+```cfm
     <cffunction name="getTests" access="private" output="false">
+```
 
 ### Add a CFM file to your project
 
 mxunit-watch uses this file to get a listing of all of your test suites and the tests they contain:
 
+```cfm
 	<cfscript>
 		testsDir = expandPath('/your/project/tests');
 		componentPath = 'your.project.tests';
@@ -43,6 +46,7 @@ mxunit-watch uses this file to get a listing of all of your test suites and the 
 	</cfscript>
 	<cfsetting showdebugoutput="false" />
 	<cfcontent reset="true" type="application/json; charset=UTF-8" /><cfoutput>#serializeJson(tests)#</cfoutput><cfabort/>
+```
 
 This file is provided in the mxunit-watch repository (test-list.cfm), or you can just copy it from above. Save it to a web-accessible location in your project and note its URL, you'll need that later.
 
