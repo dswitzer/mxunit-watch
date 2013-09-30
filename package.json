@@ -16,7 +16,6 @@
     "commander": "~2.0.0",
     "watchr": "~2.4.3"
   },
-
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
