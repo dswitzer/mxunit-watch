@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var mxunit = require('../mxunit');
+var watchr = require('watchr');
+
+program
+	.version('0.1.0')
+	.option('-d, --dir [directory]', 'Directory of files to watch')
+	.option('-l, --list [url]', 'URL of tests listing')
+	.parse(process.argv);
+
+//default to the current directory
+if (typeof program.dir === 'undefined'){
+	program.dir = __dirname;
+}
+
+watchr.watch({
+	paths: [program.dir]
+	,listeners: {
+		change: function(changeType, filePath, fileCurrentStat, filePrevStat){
+			var ext = filePath.slice(-4);
+			if (ext === '.cfm' || ext === '.cfc' || ext === '.xml'){
+				mxunit.loadList(program.list, function(loaded){
+					if (loaded){
+						mxunit.runAll(function(){});
+					}else{
+						console.log('ERROR: Unable to load tests list. Did you enter the correct URL? (' + program.list + ')');
+					}
+				});
+			}
+		}
+		,error: function(err){
+			console.log('An error occured:', err);
+		}
+	}
+	,next: function(err,watchers){
+		if (err) {
+			return console.log("Watching files failed with error", err);
+		}
+		console.log('Watching for file changes. Get coding!')
+	}
+});

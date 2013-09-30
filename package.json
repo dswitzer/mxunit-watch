@@ -1,0 +1,32 @@
+{
+  "name": "mxunit-watch",
+  "version": "0.1.0",
+  "description": "Watches a directory for file changes and runs tests whenever they occur",
+  "preferGlobal": true,
+  "directories": {
+    "bin": "./bin"
+  },
+  "main": "index.js",
+  "bin": "./bin/mxunit-watch",
+  "dependencies": {
+    "async": "~0.2.9",
+    "request": "~2.27.0",
+    "underscore": "~1.5.2",
+    "xcolor": "~0.1.0",
+    "commander": "~2.0.0",
+    "watchr": "~2.4.3"
+  },
+
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ColdFusion",
+    "MXUnit",
+    "testing",
+    "TDD"
+  ],
+  "author": "Adam Tuttle <adam@fusiongrokker.com>",
+  "license": "MIT"
+}
