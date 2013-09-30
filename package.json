@@ -7,7 +7,9 @@
     "bin": "./bin"
   },
   "main": "index.js",
-  "bin": "./bin/mxunit-watch",
+  "bin": {
+    "mxunit-watch": "./bin/mxunit-watch"
+  },
   "dependencies": {
     "async": "~0.2.9",
     "request": "~2.27.0",
@@ -27,5 +29,12 @@
     "TDD"
   ],
   "author": "Adam Tuttle <adam@fusiongrokker.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/atuttle/mxunit-watch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atuttle/mxunit-watch/issues"
+  }
 }
