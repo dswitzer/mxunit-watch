@@ -12,7 +12,9 @@ Watch a directory for file changes. When a (.cfc, .cfm, .xml) file is changed, t
 
 The guts of this tool are powered by Node, and you'll be installing it from NPM.
 
-    npm install -g mxunit-watch
+```bash
+npm install -g mxunit-watch
+```
 
 ### Requires MXUnit 2.1+
 
