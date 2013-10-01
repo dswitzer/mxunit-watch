@@ -3,9 +3,10 @@
 var program = require('commander');
 var mxunit = require('../mxunit');
 var watchr = require('watchr');
+var pkg = require('../package.json');
 
 program
-	.version('0.1.0')
+	.version(pkg.version)
 	.option('-d, --dir [directory]', 'Directory of files to watch')
 	.option('-l, --list [url]', 'URL of tests listing')
 	.parse(process.argv);
