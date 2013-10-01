@@ -1,6 +1,6 @@
 {
   "name": "mxunit-watch",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Watches a directory for file changes and runs tests whenever they occur",
   "preferGlobal": true,
   "directories": {
