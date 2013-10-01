@@ -71,5 +71,7 @@ As the output says, it's now watching for changes. Any time you save a change to
 
 ## Other options
 
+* `-H [hostname]` to set the hostname used to run tests
 * `-h` for help
 * `-V` for version
+* `--debug` will print out some debug information at startup

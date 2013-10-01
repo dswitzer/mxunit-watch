@@ -33,10 +33,10 @@ module.exports = {
 		});
 	}
 
-	,runAll: function(callback){
-		function queueSuite(suiteName){
+	,runAll: function(hostname, callback){
+		function queueSuite(hostname, suiteName){
 			return function(cb){
-				module.exports.runSuite(suiteName, function(pass){
+				module.exports.runSuite(hostname, suiteName, function(pass){
 					cb(null, pass);
 				});
 			}
@@ -44,7 +44,7 @@ module.exports = {
 
 		var queuedSuites = [];
 		for (var suite in suites){
-			queuedSuites.push( queueSuite(suite) );
+			queuedSuites.push( queueSuite(hostname, suite) );
 		}
 
 		async.series(queuedSuites, function(err, results){
@@ -62,10 +62,10 @@ module.exports = {
 		});
 	}
 
-	,runSuite: function(suiteName, callback){
-		function queueTest(suiteName, testName){
+	,runSuite: function(hostname, suiteName, callback){
+		function queueTest(hostname, suiteName, testName){
 			return function(cb){
-				module.exports.runTest(suiteName, testName, function(pass){
+				module.exports.runTest(hostname, suiteName, testName, function(pass){
 					cb(null, pass);
 				});
 			}
@@ -76,7 +76,7 @@ module.exports = {
 		var queuedTests = [];
 
 		for (var test in tests){
-			queuedTests.push( queueTest(suiteName, tests[test]) );
+			queuedTests.push( queueTest(hostname, suiteName, tests[test]) );
 		}
 
 		async.series(queuedTests, function(err, results){
@@ -91,8 +91,8 @@ module.exports = {
 		});
 	}
 
-	,runTest: function(cfc, test, callback){
-		var path = 'http://localhost/' + cfc.split('.').join('/') + '.cfc?method=runTestRemote&output=json&testMethod=' + test;
+	,runTest: function(hostname, cfc, test, callback){
+		var path = 'http://' + hostname + '/' + cfc.split('.').join('/') + '.cfc?method=runTestRemote&output=json&testMethod=' + test;
 		request(path, function(err, resp, body){
 			if (!err && resp.statusCode === 200){
 				body = JSON.parse(body)[0];

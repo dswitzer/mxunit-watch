@@ -7,13 +7,29 @@ var pkg = require('../package.json');
 
 program
 	.version(pkg.version)
+	.option('-H, --host [hostname]', 'Hostname where your tests are web-accessible')
 	.option('-d, --dir [directory]', 'Directory of files to watch')
 	.option('-l, --list [url]', 'URL of tests listing')
+	.option('--debug', 'Show debug output')
 	.parse(process.argv);
 
-//default to the current directory
-if (typeof program.dir === 'undefined'){
-	program.dir = __dirname;
+if (!program.list){
+	console.log('ERROR: --list is required');
+	process.exit(1);
+}else{
+	mxunit.loadList(program.list, function(loaded){
+		if (!loaded){
+			console.log('Unable to load the tests list. Did you enter the correct URL? (' + program.list + ')');
+		}
+	});
+}
+
+program.dir = program.dir || __dirname;
+program.host = program.host || 'localhost';
+
+if (program.debug){
+	console.log('DEBUG: Watching folder: %s', program.dir);
+	console.log('DEBUG: Tests will use hostname: %s', program.host);
 }
 
 watchr.watch({
@@ -24,7 +40,7 @@ watchr.watch({
 			if (ext === '.cfm' || ext === '.cfc' || ext === '.xml'){
 				mxunit.loadList(program.list, function(loaded){
 					if (loaded){
-						mxunit.runAll(function(){});
+						mxunit.runAll(program.host, function(){});
 					}else{
 						console.log('ERROR: Unable to load tests list. Did you enter the correct URL? (' + program.list + ')');
 					}
