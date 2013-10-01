@@ -16,15 +16,9 @@ The guts of this tool are powered by Node, and you'll be installing it from NPM.
 npm install -g mxunit-watch
 ```
 
-### Requires MXUnit 2.1+
+### Requires MXUnit Bleeding-Edge Release
 
-Unfortunately the only way to get this working was to make one tiny and non-malicious change to the MXUnit framework code.
-
-Open `mxunit.runner.DirectoryTestSuite` and change this function from private to public (on or about line 44):
-
-```cfm
-<cffunction name="getTests" access="private" output="false">
-```
+I had to [submit a small change to MXUnit](https://github.com/mxunit/mxunit/pull/33) to get it to offer up the list of tests, but they accepted my pull request, so it's now available in their Bleeding Edge Release. When another official release is published I'll update this readme with the minimum version number, but for now you should know that version 2.1.3 (the latest stable release) is _not recent enough_. You'll have to [download the latest master branch of mxunit](https://github.com/mxunit/mxunit/archive/master.zip).
 
 ### Add a CFM file to your project
 
