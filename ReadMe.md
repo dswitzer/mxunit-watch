@@ -1,5 +1,7 @@
 # mxunit-watch
 
+[![NPM version](https://badge.fury.io/js/mxunit-watch.png)](http://badge.fury.io/js/mxunit-watch)
+
 Watch a directory for file changes. When a (.cfc, .cfm, .xml) file is changed, trigger an mxunit test suite run. Results displayed neatly in the console:
 
 ![mxunit-watch in action](https://raw.github.com/atuttle/mxunit-watch/master/screenshot.png)
