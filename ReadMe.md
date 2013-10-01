@@ -23,7 +23,7 @@ Unfortunately the only way to get this working was to make one tiny and non-mali
 Open `mxunit.runner.DirectoryTestSuite` and change this function from private to public (on or about line 44):
 
 ```cfm
-    <cffunction name="getTests" access="private" output="false">
+<cffunction name="getTests" access="private" output="false">
 ```
 
 ### Add a CFM file to your project
