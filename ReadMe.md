@@ -85,6 +85,6 @@ Simply create a JSON file in the watch directory using the following format:
 }
 ```
 
-`host` should be the hostname parameter
-`list` should be the URL to the list of tests
-`debug` can be `true` or `false` and indicates whether or not debugging output should appear in the console
+* `host` should be the hostname parameter
+* `list` should be the URL to the list of tests
+* `debug` can be `true` or `false` and indicates whether or not debugging output should appear in the console
