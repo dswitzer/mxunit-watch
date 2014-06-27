@@ -69,3 +69,22 @@ As the output says, it's now watching for changes. Any time you save a change to
 * `-h` for help
 * `-V` for version
 * `--debug` will print out some debug information at startup
+* `--save` will save your hostname, list and debug settings to a .mxunit-watch file in your watch directory (see below for more information)
+
+## .mxunit-watch
+
+You can create an .mxunit-watch file in your watch directory (the -d or --dir option).  This can hold your list, host and debug settings.
+
+Simply create a JSON file in the watch directory using the following format:
+
+```JSON
+{
+	"host": "localhost",
+	"list": "http://localhost/my/project/tests/test-list.cfm",
+	"debug": true
+}
+```
+
+* `host` should be the hostname parameter
+* `list` should be the URL to the list of tests
+* `debug` can be `true` or `false` and indicates whether or not debugging output should appear in the console
