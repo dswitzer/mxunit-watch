@@ -71,9 +71,9 @@ As the output says, it's now watching for changes. Any time you save a change to
 * `--debug` will print out some debug information at startup
 * `--save` will save your hostname, list and debug settings to a .mxunit-watch file in your watch directory (see below for more information)
 
-## .mxunit-config
+## .mxunit-watch
 
-You can create an .mxunit-config file in your watch directory (the -d or --dir option).  This can hold your list, host and debug settings.
+You can create an .mxunit-watch file in your watch directory (the -d or --dir option).  This can hold your list, host and debug settings.
 
 Simply create a JSON file in the watch directory using the following format:
 
