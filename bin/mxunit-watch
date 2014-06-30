@@ -23,7 +23,9 @@ program
 	})
 	.parse(process.argv);
 
-program.dir = program.dir || __dirname;
+program.dir = program.dir || process.cwd() + "/";
+
+console.log(program.dir);
 
 // try to read JSON configuration in watch directory
 var configFilePath = program.dir + ".mxunit-watch";
