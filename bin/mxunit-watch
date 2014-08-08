@@ -5,12 +5,16 @@ var mxunit = require('../mxunit');
 var watchr = require('watchr');
 var pkg = require('../package.json');
 var fs = require("fs");
+var glob = require("glob");
 
 program
 	.version(pkg.version)
 	.option('-H, --host [hostname]', 'Hostname where your tests are web-accessible')
 	.option('-d, --dir [directory]', 'Directory of files to watch')
 	.option('-l, --list [url]', 'URL of tests listing')
+	.option('-e, --extensions <list>', 'Comma separated list of extensions to watch (cfm,cfc,xml by default)', function (val) {
+		return val.split(',');
+	})
 	.option('--debug', 'Show debug output')
 	.option('--save', 'Save configuration to .mxunit-watch')
 	.on("--help", function(){
@@ -19,6 +23,7 @@ program
 		console.log('  "host": "localhost",');
 		console.log('  "list": "http://localhost/path/to/list.cfm"');
 		console.log('  "debug": true');
+		console.log('  "extensions": [ "cfm", "cfc", "xml" ]');
 		console.log("}");
 	})
 	.parse(process.argv);
@@ -60,9 +65,11 @@ if (!program.list){
 }
 
 program.host = program.host || 'localhost';
+program.extensions = program.extensions || [ "cfm", "cfc", "xml" ];
 
 if (program.debug){
 	console.log('DEBUG: Watching folder: %s', program.dir);
+	console.log('DEBUG: Watching extensions: %s', program.extensions);
 	console.log('DEBUG: Tests will use hostname: %s', program.host);
 }
 
@@ -71,7 +78,8 @@ if (program.save){
 		fs.writeFileSync(configFilePath, JSON.stringify({
 			host: program.host,
 			list: program.list,
-			debug: ((program.debug) ? true : false)
+			debug: ((program.debug) ? true : false),
+			extensions: program.extensions
 		}));
 		if (program.debug) {
 			console.log('DEBUG: Saved configuration to', configFilePath);
@@ -81,12 +89,11 @@ if (program.save){
 	}
 }
 
-watchr.watch({
-	paths: [program.dir]
-	,listeners: {
-		change: function(changeType, filePath, fileCurrentStat, filePrevStat){
-			var ext = filePath.slice(-4);
-			if (ext === '.cfm' || ext === '.cfc' || ext === '.xml'){
+glob("**/*.+(" + program.extensions.join("|") + ")", {}, function(err, matches){
+	watchr.watch({
+		paths: matches
+		,listeners: {
+			change: function(changeType, filePath, fileCurrentStat, filePrevStat){
 				mxunit.loadList(program.list, function(loaded){
 					if (loaded){
 						mxunit.runAll(program.host, function(){});
@@ -95,15 +102,15 @@ watchr.watch({
 					}
 				});
 			}
+			,error: function(err){
+				console.log('An error occured:', err);
+			}
 		}
-		,error: function(err){
-			console.log('An error occured:', err);
+		,next: function(err,watchers){
+			if (err) {
+				return console.log("Watching files failed with error", err);
+			}
+			console.log('Watching for file changes. Get coding!')
 		}
-	}
-	,next: function(err,watchers){
-		if (err) {
-			return console.log("Watching files failed with error", err);
-		}
-		console.log('Watching for file changes. Get coding!')
-	}
+	});
 });

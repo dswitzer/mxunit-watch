@@ -12,11 +12,12 @@
   },
   "dependencies": {
     "async": "~0.2.9",
+    "commander": "~2.0.0",
+    "glob": "^4.0.5",
     "request": "~2.27.0",
     "underscore": "~1.5.2",
-    "xcolor": "~0.1.0",
-    "commander": "~2.0.0",
-    "watchr": "~2.4.3"
+    "watchr": "~2.4.3",
+    "xcolor": "~0.1.0"
   },
   "devDependencies": {},
   "scripts": {
