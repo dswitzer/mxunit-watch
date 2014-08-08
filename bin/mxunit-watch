@@ -23,6 +23,7 @@ program
 		console.log('  "host": "localhost",');
 		console.log('  "list": "http://localhost/path/to/list.cfm"');
 		console.log('  "debug": true');
+		console.log('  "extensions": [ "cfm", "cfc", "xml" ]');
 		console.log("}");
 	})
 	.parse(process.argv);
