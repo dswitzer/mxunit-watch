@@ -66,6 +66,7 @@ As the output says, it's now watching for changes. Any time you save a change to
 ## Other options
 
 * `-H [hostname]` to set the hostname used to run tests
+* `-e [list]` to set the list of extensions to watch.  by default this is cfm,cfc,xml.  Specify as a comma separated list of extensions.  Example: `cfm,xml,cfc,js`
 * `-h` for help
 * `-V` for version
 * `--debug` will print out some debug information at startup
@@ -81,10 +82,16 @@ Simply create a JSON file in the watch directory using the following format:
 {
 	"host": "localhost",
 	"list": "http://localhost/my/project/tests/test-list.cfm",
-	"debug": true
+	"debug": true,
+	"extensions": [
+		"cfm",
+		"cfc",
+		"xml"
+	]
 }
 ```
 
 * `host` should be the hostname parameter
 * `list` should be the URL to the list of tests
 * `debug` can be `true` or `false` and indicates whether or not debugging output should appear in the console
+* `extensions` is an array of extensions to watch
