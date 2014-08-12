@@ -95,3 +95,44 @@ Simply create a JSON file in the watch directory using the following format:
 * `list` should be the URL to the list of tests
 * `debug` can be `true` or `false` and indicates whether or not debugging output should appear in the console
 * `extensions` is an array of extensions to watch
+
+## Grunt Task
+
+You can also use this as a [Grunt](http://gruntjs.com/) task.  Read the [Grunt docs](http://gruntjs.com/getting-started) if you are unfamiliar with Grunt.
+
+To setup your task, in your Gruntfile.js file add:
+
+```Javascript
+grunt.loadNpmTasks('mxunit-watch');
+````
+
+and within your `grunt.initConfig({...});` block add:
+
+```Javascript
+mxunit: {
+	options: {
+		host: "local.fdr.aesnet.org",
+		list: "http://local.fdr.aesnet.org/tests/cfml/list-tests.cfm"
+	}
+}
+```
+
+You can then run your tests with `grunt mxunit`
+
+This is compatible with [grunt-contrib-watch](https://www.npmjs.org/package/grunt-contrib-watch) as well.
+
+Example:
+
+```Javascript
+watch: {
+	mxunit: {
+		files: [
+			'**/*.cfm',
+			'**/*.cfc'
+		],
+		tasks: [ "mxunit" ]
+	}
+}
+```
+
+That tells the watch task to watch all *.cfm and *.cfc files for changes, and will run the `mxunit` task whenever one of those files changes.
