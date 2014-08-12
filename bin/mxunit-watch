@@ -39,6 +39,7 @@ try {
 		program.list = program.list || config.list;
 		program.host = program.host || config.host;
 		program.debug = program.debug || config.debug;
+		program.extensions = program.extensions || config.extensions;
 		if (program.debug){
 			console.log("DEBUG: found config file at " + configFilePath);
 		}
