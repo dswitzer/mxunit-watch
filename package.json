@@ -28,8 +28,7 @@
     "ColdFusion",
     "MXUnit",
     "testing",
-    "TDD",
-    ""
+    "TDD"
   ],
   "author": "Adam Tuttle <adam@fusiongrokker.com>",
   "license": "MIT",
