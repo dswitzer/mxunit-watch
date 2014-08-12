@@ -39,12 +39,13 @@ try {
 		program.list = program.list || config.list;
 		program.host = program.host || config.host;
 		program.debug = program.debug || config.debug;
+		program.extensions = program.extensions || config.extensions;
 		if (program.debug){
 			console.log("DEBUG: found config file at " + configFilePath);
 		}
 	} catch (err) {
 		// most likely invalid JSON
-		console.error("ERROR: Error parsing " + program.dir + ".mxunit most likely it is invalid JSON");
+		console.error("ERROR: Error parsing " + program.dir + ".mxunit-watch most likely it is invalid JSON");
 	}
 } catch (err) {
 	// no config file present
