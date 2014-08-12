@@ -45,7 +45,7 @@ try {
 		}
 	} catch (err) {
 		// most likely invalid JSON
-		console.error("ERROR: Error parsing " + program.dir + ".mxunit most likely it is invalid JSON");
+		console.error("ERROR: Error parsing " + program.dir + ".mxunit-watch most likely it is invalid JSON");
 	}
 } catch (err) {
 	// no config file present
