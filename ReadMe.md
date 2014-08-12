@@ -111,8 +111,8 @@ and within your `grunt.initConfig({...});` block add:
 ```Javascript
 mxunit: {
 	options: {
-		host: "local.fdr.aesnet.org",
-		list: "http://local.fdr.aesnet.org/tests/cfml/list-tests.cfm"
+		host: "localhost",
+		list: "http://localhost/list-tests.cfm"
 	}
 }
 ```
