@@ -71,7 +71,8 @@ module.exports = {
 			}
 		}
 
-		console.log('\n%s\n' + fix.repeat('-', lineWidth), suiteName);
+		xcolor.log('\n{{blue}}' + suiteName + '{{/color}}\n')
+		console.log(fix.repeat('-', lineWidth));
 		var tests = suites[suiteName];
 		var queuedTests = [];
 
@@ -96,7 +97,6 @@ module.exports = {
 		request(path, function(err, resp, body){
 			if (!err && resp.statusCode === 200){
 				body = JSON.parse(body)[0];
-				// console.log(body);
 				if (body.TESTSTATUS === 'Passed'){
 					xcolor.log(fix.padr(test, lineWidth - 9) + ' [{{bg green}}{{white}} PASS {{/color}}]');
 					callback(true);

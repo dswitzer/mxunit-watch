@@ -12,6 +12,7 @@ program
 	.option('-H, --host [hostname]', 'Hostname where your tests are web-accessible')
 	.option('-d, --dir [directory]', 'Directory of files to watch')
 	.option('-l, --list [url]', 'URL of tests listing')
+	.option('-t, --test [url]', 'Run a first test')
 	.option('-e, --extensions <list>', 'Comma separated list of extensions to watch (cfm,cfc,xml by default)', function (val) {
 		return val.split(',');
 	})
@@ -111,7 +112,9 @@ glob("**/*.+(" + program.extensions.join("|") + ")", {}, function(err, matches){
 			if (err) {
 				return console.log("Watching files failed with error", err);
 			}
-			console.log('Watching for file changes. Get coding!')
+			console.log('Watching for file changes. Get coding!');
+			if (program.test) {mxunit.runAll(program.host, function(){});}
+			
 		}
 	});
 });
