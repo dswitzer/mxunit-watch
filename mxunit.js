@@ -11,7 +11,9 @@ var lineWidth = 80;
 var httpTimeout = 120000; // in milliseconds
 var batchMode = false;
 
-var suites = {};
+var suites = {}
+	, suiteCount = 0
+;
 
 function isEmpty(obj) {
     if (obj == null) return true;
@@ -43,8 +45,9 @@ function log(str, callback) {
   xcolor.log.apply(this, args);
 }
 
-function writeSuiteName(suiteName){
-	log('\n\n{{blue}}' + suiteName + '{{/color}}');
+function writeSuiteName(suiteName, desc){
+	let description = (typeof desc === "string") ? ' ' + desc + ' '  : '';
+	log('\n\n{{blue}}%s{{/color}}{{white}}%s{{/color}}', fix.padr(suiteName, lineWidth-description.length), description);
 	console.log(fix.repeat('-', lineWidth));
 }
 
@@ -134,8 +137,10 @@ module.exports = {
 		request({url: url, timeout: httpTimeout}, function(err, resp, body){
 			if (!err && resp.statusCode === 200){
 				suites = JSON.parse(body);
+				suiteCount = Object.keys(suites).length;
 			}else{
 				suites = {};
+				suiteCount = 0;
 			}
 			if (callback){
 				callback(!isEmpty(suites));
@@ -180,17 +185,20 @@ module.exports = {
 	, runAll: function(hostname, callback){
 		let startTime = utils.getEpochMilliseconds();
 
-		function queueSuite(hostname, suiteName){
+		function queueSuite(hostname, suiteName, idx){
+			let suiteNameDesc = "(" + idx + " of " + suiteCount + ")";
 			return function(cb){
 				module.exports[batchMode ? "runSuiteFull" : "runSuite"](hostname, suiteName, function(results){
 					cb(null, results);
-				});
+				}, suiteNameDesc);
 			}
 		}
 
-		var queuedSuites = [];
-		for (var suite in suites){
-			queuedSuites.push( queueSuite(hostname, suite) );
+		var queuedSuites = []
+			, idx = 0
+		;
+		for( var suite in suites ){
+			queuedSuites.push( queueSuite(hostname, suite, ++idx) );
 		}
 
 		async.series(queuedSuites, function(err, results){
@@ -238,11 +246,11 @@ module.exports = {
 		});
 	}
 
-	, runSuiteFull: function(hostname, suiteName, callback){
+	, runSuiteFull: function(hostname, suiteName, callback, desc){
 		let startTime = utils.getEpochMilliseconds();
 		var path = 'http://' + hostname + '/' + suiteName.split('.').join('/') + '.cfc?method=runTestRemote&output=json';
 
-		writeSuiteName(suiteName);
+		writeSuiteName(suiteName, desc);
 
 		const updateLine = (msg) => process.stdout.write("\r" + (msg||""));
 		const workingUpdate = () => updateLine("Running test suite... " + utils.timerFormat(utils.getEpochMilliseconds() - startTime));
@@ -300,7 +308,7 @@ module.exports = {
 		});
 	}
 
-	, runSuite: function(hostname, suiteName, callback){
+	, runSuite: function(hostname, suiteName, callback, desc){
 		let startTime = utils.getEpochMilliseconds();
 		let suiteResults = new TestSuiteResult(suiteName, true)
 
@@ -316,7 +324,7 @@ module.exports = {
 			}
 		}
 
-		writeSuiteName(suiteName);
+		writeSuiteName(suiteName, desc);
 
 		var tests = suites[suiteName];
 		var queuedTests = [];
