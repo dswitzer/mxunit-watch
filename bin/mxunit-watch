@@ -1,18 +1,24 @@
 #!/usr/bin/env node
 
-var program = require('commander');
-var mxunit = require('../mxunit');
-var watchr = require('watchr');
-var pkg = require('../package.json');
-var fs = require("fs");
-var glob = require("glob");
+const program = require('commander');
+const mxunit = require('../mxunit');
+const watchr = require('watchr');
+const pkg = require('../package.json');
+const fs = require("fs");
+const glob = require("glob");
+const process = require('process');
+
 
 program
 	.version(pkg.version)
 	.option('-H, --host [hostname]', 'Hostname where your tests are web-accessible')
+	.option('-r, --run', 'Run all tests immediately and exit when done (does not watch directories, use --test to run tests and watch for changes)')
 	.option('-d, --dir [directory]', 'Directory of files to watch')
 	.option('-l, --list [url]', 'URL of tests listing')
 	.option('-t, --test [url]', 'Run a first test')
+	.option('-w, --linewidth [width]', 'The line width to use for the output (default: 80)')
+	.option('-x, --timeout [timeout]', 'The maximum timeout in seconds for the HTTP connection (default: 30)')
+	.option('-b, --batch', 'Forces test suites to run in a single HTTP operation which will improve performance.')
 	.option('-e, --extensions <list>', 'Comma separated list of extensions to watch (cfm,cfc,xml by default)', function (val) {
 		return val.split(',');
 	})
@@ -24,6 +30,9 @@ program
 		console.log('  "host": "localhost",');
 		console.log('  "list": "http://localhost/path/to/list.cfm"');
 		console.log('  "debug": true');
+		console.log('  "linewidth": 80');
+		console.log('  "timeout": 30');
+		console.log('  "batch": false');
 		console.log('  "extensions": [ "cfm", "cfc", "xml" ]');
 		console.log("}");
 	})
@@ -40,6 +49,9 @@ try {
 		program.list = program.list || config.list;
 		program.host = program.host || config.host;
 		program.debug = program.debug || config.debug;
+		program.batch = program.batch || config.batch;
+		program.linewidth = program.linewidth || config.linewidth;
+		program.timeout = program.timeout || config.timeout;
 		program.extensions = program.extensions || config.extensions;
 		if (program.debug){
 			console.log("DEBUG: found config file at " + configFilePath);
@@ -55,6 +67,18 @@ try {
 	}
 }
 
+if( program.linewidth ){
+	mxunit.setLineWidth(parseFloat(program.linewidth));
+}
+
+if( program.batch ){
+	mxunit.setBatchMode(true);
+}
+
+if( program.timeout ){
+	mxunit.setHttpTimeout(parseFloat(program.timeout));
+}
+
 if (!program.list){
 	console.log('ERROR: --list is required');
 	process.exit(1);
@@ -62,6 +86,11 @@ if (!program.list){
 	mxunit.loadList(program.list, function(loaded){
 		if (!loaded){
 			console.log('Unable to load the tests list. Did you enter the correct URL? (' + program.list + ')');
+		} else if (program.run){
+			if (program.debug){
+				console.log('DEBUG: Running all tests');
+			}
+			mxunit.runAll(program.host, function(){});
 		}
 	});
 }
@@ -70,25 +99,45 @@ program.host = program.host || 'localhost';
 program.extensions = program.extensions || [ "cfm", "cfc", "xml" ];
 
 if (program.debug){
-	console.log('DEBUG: Watching folder: %s', program.dir);
-	console.log('DEBUG: Watching extensions: %s', program.extensions);
+	if( !program.run ){
+		console.log('DEBUG: Watching folder: %s', program.dir);
+		console.log('DEBUG: Watching extensions: %s', program.extensions);
+	}
 	console.log('DEBUG: Tests will use hostname: %s', program.host);
+	console.log('DEBUG: Line width: %s', mxunit.getLineWidth());
+	console.log('DEBUG: Line width: %s', mxunit.getHttpTimeout());
 }
 
 if (program.save){
 	try {
-		fs.writeFileSync(configFilePath, JSON.stringify({
+		let config = {
 			host: program.host,
 			list: program.list,
 			debug: ((program.debug) ? true : false),
+			batch: ((program.batch) ? true : false),
 			extensions: program.extensions
-		}));
+		};
+
+		// check for optional command line arguments
+		if( !!program.linewidth ){
+			config.linewidth = program.linewidth;
+		}
+		if( !!program.timeout ){
+			config.timeout = program.timeout;
+		}
+
+		fs.writeFileSync(configFilePath, JSON.stringify(config));
 		if (program.debug) {
 			console.log('DEBUG: Saved configuration to', configFilePath);
 		}
 	} catch (err) {
 		console.err("ERROR: Could not save configuration to", configFilePath);
 	}
+}
+
+if( program.run ){
+	// when running all tests we should just exit before doing anything else
+	return;
 }
 
 glob("**/*.+(" + program.extensions.join("|") + ")", {}, function(err, matches){
@@ -105,7 +154,7 @@ glob("**/*.+(" + program.extensions.join("|") + ")", {}, function(err, matches){
 				});
 			}
 			,error: function(err){
-				console.log('An error occured:', err);
+				console.log('An error occurred:', err);
 			}
 		}
 		,next: function(err,watchers){
@@ -114,7 +163,7 @@ glob("**/*.+(" + program.extensions.join("|") + ")", {}, function(err, matches){
 			}
 			console.log('Watching for file changes. Get coding!');
 			if (program.test) {mxunit.runAll(program.host, function(){});}
-			
+
 		}
 	});
 });

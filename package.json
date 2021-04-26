@@ -1,6 +1,6 @@
 {
   "name": "mxunit-watch",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Watches a directory for file changes and runs tests whenever they occur",
   "preferGlobal": true,
   "directories": {
@@ -14,7 +14,7 @@
     "async": "~0.2.9",
     "commander": "~2.0.0",
     "glob": "^4.0.5",
-    "request": "~2.27.0",
+    "request": ">=2.68.0",
     "underscore": "~1.5.2",
     "watchr": "~2.4.3",
     "xcolor": "~0.1.0"
@@ -30,13 +30,16 @@
     "testing",
     "TDD"
   ],
-  "author": "Adam Tuttle <adam@fusiongrokker.com>",
+  "author": {
+    "name": "Dan G. Switzer, II",
+    "email": "dswitzer@pengoworks.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/atuttle/mxunit-watch.git"
   },
   "bugs": {
-    "url": "https://github.com/atuttle/mxunit-watch/issues"
+    "url": "https://github.com/dswitzer/mxunit-watch/issues"
   }
 }
