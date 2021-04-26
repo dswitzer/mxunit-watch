@@ -1,6 +1,6 @@
 {
   "name": "mxunit-watch",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Watches a directory for file changes and runs tests whenever they occur",
   "preferGlobal": true,
   "directories": {
@@ -37,7 +37,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/atuttle/mxunit-watch.git"
+    "url": "git://github.com/dswitzer/mxunit-watch.git"
   },
   "bugs": {
     "url": "https://github.com/dswitzer/mxunit-watch/issues"
