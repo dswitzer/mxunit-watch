@@ -15,9 +15,9 @@ program
 	.option('-r, --run', 'Run all tests immediately and exit when done (does not watch directories, use --test to run tests and watch for changes)')
 	.option('-d, --dir [directory]', 'Directory of files to watch')
 	.option('-l, --list [url]', 'URL of tests listing')
-	.option('-t, --test [url]', 'Run a first test')
+	.option('-t, --test', 'Runs the tests at startup')
 	.option('-w, --linewidth [width]', 'The line width to use for the output (default: 80)')
-	.option('-x, --timeout [timeout]', 'The maximum timeout in seconds for the HTTP connection (default: 30)')
+	.option('-x, --timeout [timeout]', 'The maximum timeout (in seconds) for the HTTP connection (default: 30)')
 	.option('-b, --batch', 'Forces test suites to run in a single HTTP operation which will improve performance.')
 	.option('-e, --extensions <list>', 'Comma separated list of extensions to watch (cfm,cfc,xml by default)', function (val) {
 		return val.split(',');
@@ -28,11 +28,11 @@ program
 		console.log("You can also create a .mxunit-watch JSON file in your watch directory to specify your project's options:");
 		console.log("{");
 		console.log('  "host": "localhost",');
-		console.log('  "list": "http://localhost/path/to/list.cfm"');
-		console.log('  "debug": true');
-		console.log('  "linewidth": 80');
-		console.log('  "timeout": 30');
-		console.log('  "batch": false');
+		console.log('  "list": "http://localhost/path/to/list.cfm",');
+		console.log('  "debug": true,');
+		console.log('  "linewidth": 80,');
+		console.log('  "timeout": 30,');
+		console.log('  "batch": false,');
 		console.log('  "extensions": [ "cfm", "cfc", "xml" ]');
 		console.log("}");
 	})
