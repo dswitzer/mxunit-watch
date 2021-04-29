@@ -36,6 +36,14 @@ mxunit-watch uses this file to get a listing of all of your test suites and the 
 		, excludes="/Test.*$,^_assets/"
 		, precompile=false
 	);
+
+	// apply the filter string to restrict the test suites we run
+	if( structKeyExists(url, "filter") && len(url.filter) ){
+		files = arrayFilter(files, function (file, index, files){
+			return reFindNoCase(url.filter, arguments.file, 0) > 0 ? true : false;
+		});
+	}
+
 	// the results to return (we use a hashed map, so the tests are run in order)
 	results = createObject("java", "java.util.LinkedHashMap").init();
 
@@ -109,6 +117,7 @@ Alternatively, you can just run the test suites once and return to a command pro
 * `-w, --linewidth [width]` the line width to use for the output (default: 80)
 * `-x, --timeout [timeout]` the maximum timeout (in seconds) for the HTTP connection (default: 30)
 * `-b, --batch` forces test suites to run in a single HTTP operation which will improve performance.
+* `-f, --filter [string]` appends a "filter" argument to the "list" endpoint to limit which test suites are run (your list endpoint must apply the logic for this filter)
 * `-t, --test` Runs all the tests are startup (only valid with the `-d` or `--dir` arguments).
 * `-h, --help` for help
 * `-V` for version

@@ -10,6 +10,7 @@ var TestSuiteResult = require('./TestSuiteResult');
 var lineWidth = 80;
 var httpTimeout = 120000; // in milliseconds
 var batchMode = false;
+var urlFilterParam = null;
 
 var suites = {}
 	, suiteCount = 0
@@ -127,11 +128,19 @@ function getHttpError(err, resp, httpTimeout){
 	};
 }
 
+function appendUrlParam(url, name, value){
+	return url + ((url.indexOf("?") === -1) ? "?" : "&") + name + "=" + encodeURIComponent(value);
+}
+
 module.exports = {
 
 	loadList: function(url, callback){
 		if( batchMode ){
-			url += (url.indexOf("?" === -1) ? "?" : "&") + "batch=true";
+			url = appendUrlParam(url, "batch", true);
+		}
+
+		if( urlFilterParam ){
+			url = appendUrlParam(url, "filter", urlFilterParam);
 		}
 
 		request({url: url, timeout: httpTimeout}, function(err, resp, body){
@@ -180,6 +189,14 @@ module.exports = {
 
 	, setBatchMode: function (status){
 		batchMode = !!status;
+	}
+
+	, getFilter: function (){
+		return urlFilterParam;
+	}
+
+	, setFilter: function (filter){
+		urlFilterParam = filter;
 	}
 
 	, runAll: function(hostname, callback){

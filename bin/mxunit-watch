@@ -19,6 +19,7 @@ program
 	.option('-w, --linewidth [width]', 'The line width to use for the output (default: 80)')
 	.option('-x, --timeout [timeout]', 'The maximum timeout (in seconds) for the HTTP connection (default: 30)')
 	.option('-b, --batch', 'Forces test suites to run in a single HTTP operation which will improve performance.')
+	.option('-f, --filter [string]', 'Appends a "filter" argument to the "list" endpoint to limit which test suites are run. (NOTE - Your list endpoint must apply the logic for this filter.)')
 	.option('-e, --extensions <list>', 'Comma separated list of extensions to watch (cfm,cfc,xml by default)', function (val) {
 		return val.split(',');
 	})
@@ -50,6 +51,7 @@ try {
 		program.host = program.host || config.host;
 		program.debug = program.debug || config.debug;
 		program.batch = program.batch || config.batch;
+		program.filter = program.filter || config.filter;
 		program.linewidth = program.linewidth || config.linewidth;
 		program.timeout = program.timeout || config.timeout;
 		program.extensions = program.extensions || config.extensions;
@@ -73,6 +75,10 @@ if( program.linewidth ){
 
 if( program.batch ){
 	mxunit.setBatchMode(true);
+}
+
+if( program.filter ){
+	mxunit.setFilter(program.filter);
 }
 
 if( program.timeout ){
@@ -124,6 +130,9 @@ if (program.save){
 		}
 		if( !!program.timeout ){
 			config.timeout = program.timeout;
+		}
+		if( !!program.filter ){
+			config.filter = program.filter;
 		}
 
 		fs.writeFileSync(configFilePath, JSON.stringify(config));
