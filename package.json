@@ -1,6 +1,6 @@
 {
   "name": "mxunit-watch",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Watches a directory for file changes and runs tests whenever they occur",
   "preferGlobal": true,
   "directories": {
@@ -15,7 +15,7 @@
     "commander": "~2.0.0",
     "glob": "^4.0.5",
     "request": ">=2.68.0",
-    "underscore": "~1.5.2",
+    "underscore": "~1.12.1",
     "watchr": "~2.4.3",
     "xcolor": "~0.1.0"
   },
